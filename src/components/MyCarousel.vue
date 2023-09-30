@@ -1,51 +1,51 @@
 <template>
-    <swiper :options="swiperOptions" class="my-swiper">
-      <swiper-slide>
-        <img src="/images/test.avif" alt="France" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="/images/test6.jpg" alt="Image 2" />
-      </swiper-slide>
-      <!-- ... additional slides as needed ... -->
-    </swiper>
-  </template>
-  
-  <script>
-  import { Swiper, SwiperSlide } from 'swiper/vue';
-  import 'swiper/swiper-bundle.css';
-  
-  export default {
-    name: 'MyCarousel',
-    components: {
-      Swiper,
-      SwiperSlide,
-    },
-    data() {
-      return {
-        swiperOptions: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-          loop: true,
-          autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-          },
-        },
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .my-swiper {
-    width: 100%;
-    height: 400px;  /* or whatever height you prefer */
+  <Carousel :autoplay="5000" :wrap-around="true" pause-autoplay-on-hover>
+    <Slide v-for="image in images" :key="image" class="carousel__slide">
+      <img :src="image" alt="Carousel Image" class="carousel__image" />
+    </Slide>
+
+    <template #addons>
+      <Pagination />
+    </template>
+  </Carousel>
+</template>
+
+<script>
+import { defineComponent } from 'vue'
+import { Carousel, Pagination, Slide } from 'vue3-carousel'
+
+import 'vue3-carousel/dist/carousel.css'
+
+export default defineComponent({
+  name: 'MyCarousel',
+  components: {
+    Carousel,
+    Slide,
+    Pagination,
+  },
+  data() {
+    return {
+      images: [
+        '/images/test.avif',
+        '/images/test6.jpg',
+        '/images/skopje.jpg',
+        // ... add more image paths as needed
+      ]
+    };
   }
-  
-  .swiper-slide img {
-    width: 100%;  /* Ensure the image width matches the container width */
-    height: 100%;  /* Ensure the image height matches the container height */
-    object-fit: fill;  /* Stretch the image to fill the container */
-  }
-  </style>
-  
+})
+</script>
+
+<style scoped>
+.carousel__slide {
+  height: 400px;
+  overflow: hidden; /* This will hide any part of the image that exceeds the slide's dimensions */
+}
+
+.carousel__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* This will ensure the image covers the entire slide without distortion */
+}
+
+</style>
