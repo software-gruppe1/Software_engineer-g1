@@ -15,6 +15,7 @@
   </script>
   
   <style scoped>
+  
   .button-container {
     display: flex;
     justify-content: center;
@@ -37,7 +38,7 @@
     background: linear-gradient(135deg, #8ae553 0%, #8ae553 22%, #6ecb47 22%, #6ecb47 28%, #53b03b 28%, #53b03b 72%, #37962f 72%, #37962f 100%);
     background-size: 200% 100%;
     background-position: 0 0;
-    font-family:'Archivo', sans-serif;
+    font-family: 'Oswald Variable', sans-serif;
     text-transform: uppercase;
     font-weight: 700;
     padding: 13px 20px 12px;
