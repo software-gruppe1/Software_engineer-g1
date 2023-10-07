@@ -4,6 +4,7 @@
     <Navbar />
     <MyCarousel />
     <BigButton />
+    <TransparentBox />
     <!-- ... other content ... -->
   </div>
 </template>
@@ -12,13 +13,14 @@
 import Navbar from './components/Navbar.vue';
 import MyCarousel from './components/MyCarousel.vue';
 import BigButton from './components/BigButton.vue'; // Importing the new component
-
+import TransparentBox from './components/TransparentBox.vue';
 export default {
   name: 'App',
   components: {
     Navbar,
     MyCarousel,
-    BigButton, // Registering the new component
+    BigButton,
+    TransparentBox, // Registering the new component
   },
 };
 </script>

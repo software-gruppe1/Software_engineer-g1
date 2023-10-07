@@ -1,7 +1,7 @@
 <!-- src/components/BigButton.vue -->
 <template>
     <div class="button-container">
-      <button class="big-button btn">Explore</button> <!-- Added the .btn class -->
+      <button class="big-button btn"> Uncover thrilling new destinations for your tourist journey</button> <!-- Added the .btn class -->
     </div>
   </template>
   
