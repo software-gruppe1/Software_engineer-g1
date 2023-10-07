@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="/images/logo.png" alt="Logo" class="navbar-logo">
+        <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
       </a>
       <button
         class="navbar-toggler"
