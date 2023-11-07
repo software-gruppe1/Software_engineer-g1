@@ -41,8 +41,8 @@
     <div v-if="showLoginModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showLoginModal = false">&times;</span>
-        <button @click="login('user')">Login as User</button>
-        <button @click="login('admin')">Login as Admin</button>
+        <button @click="login('User')">Login as User</button>
+        <button @click="login('Admin')">Login as Admin</button>
       </div>
     </div>
   </nav>
@@ -58,16 +58,29 @@ export default {
     };
   },
   methods: {
-    login(role) {
-      // Implement your login logic here
-      console.log(`Login as ${role}`); // Placeholder for demonstration
+    async login(role) {
+      try {
+        const url = `http://localhost:8080/user/account/${role}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        this.$emit('user-logged-in', data);
+      } catch (error) {
+        console.error('Fetch error:', error);
+        // Here, you might want to update the UI to show the error
+      }
+
       this.showLoginModal = false;
-      // Emit an event to the parent component
-      this.$emit('user-logged-in', role);
     },
   },
 };
 </script>
+
 
 <style scoped>
 .navbar {
