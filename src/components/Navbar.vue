@@ -83,9 +83,7 @@ export default {
 
 
 <style scoped>
-.navbar {
-  /* Add your existing navbar styles here */
-}
+
 
 .navbar-brand .navbar-logo {
   height: 40px; /* Adjust this value to control the size of the logo */
