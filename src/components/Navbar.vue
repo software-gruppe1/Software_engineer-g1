@@ -38,6 +38,10 @@
           </div>
         </div>
         <button v-else class="btn btn-outline-primary ms-2" @click="showLoginModal = true">Login</button>
+        <div v-if="isLoggedIn" class="cart-info">
+          <img src="/images/cart.svg" alt="Cart" class="cart-icon">
+          <span v-if="accountDetails.shopping_cart">{{ accountDetails.shopping_cart.totalPrice }}</span>
+        </div>
       </div>
     
     </div>
@@ -172,4 +176,15 @@ button {
   /* Style your dropdown menu */
 }
 
+.cart-info {
+  display: flex;
+  align-items: center;
+  margin-left: 50px; 
+}
+
+.cart-icon {
+  width: 20px; /* Adjust the size as needed */
+  height: auto;
+  margin-right: 5px;
+}
 </style>
