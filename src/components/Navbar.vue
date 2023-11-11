@@ -1,40 +1,45 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
+      <!-- Logo -->
       <a class="navbar-brand" href="#">
         <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        @click="isNavOpen = !isNavOpen"
-        :aria-expanded="isNavOpen.toString()"
-        aria-label="Toggle navigation"
-      >
+
+      <!-- Navbar Toggle for Mobile View -->
+      <button class="navbar-toggler" type="button" @click="isNavOpen = !isNavOpen"
+              :aria-expanded="isNavOpen.toString()" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- Navbar Links and Login/User Icon -->
       <div :class="{ 'collapse': !isNavOpen, 'navbar-collapse': true }" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
+          <!-- Navigation Links -->
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
+
+        <!-- Search Form -->
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        <!-- Trigger/Login Button -->
-        <button class="btn btn-outline-primary ms-2" type="button" @click="showLoginModal = true">Login</button>
+
+        <!-- Conditional Rendering for Login Button or User Icon -->
+        <div v-if="isLoggedIn">
+          <img src="/images/person-square.svg" @click="toggleDropdown" class="user-icon">
+          <span class="username">{{ accountDetails.username }}</span>
+          <div v-if="showDropdown" class="dropdown-menu">
+            <div v-if="accountDetails && accountDetails.role === 'Admin'">Admin Options</div>
+            <div v-else>User Options</div>
+          </div>
+        </div>
+        <button v-else class="btn btn-outline-primary ms-2" @click="showLoginModal = true">Login</button>
       </div>
+    
     </div>
 
     <!-- Login Modal -->
@@ -48,6 +53,7 @@
   </nav>
 </template>
 
+
 <script>
 export default {
   name: 'Navbar',
@@ -55,6 +61,9 @@ export default {
     return {
       isNavOpen: false,
       showLoginModal: false,
+      isLoggedIn: false,
+      showDropdown: false,
+      accountDetails: null,
     };
   },
   methods: {
@@ -62,20 +71,21 @@ export default {
       try {
         const url = `http://localhost:8080/user/account/${role}`;
         const response = await fetch(url);
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        const data = await response.json();
-        console.log(data);
-        this.$emit('user-logged-in', data);
+        const account = await response.json();
+        if (account) {
+          this.isLoggedIn = true;
+          this.accountDetails = account;
+        }
       } catch (error) {
         console.error('Fetch error:', error);
-        // Here, you might want to update the UI to show the error
       }
-
       this.showLoginModal = false;
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
     },
   },
 };
@@ -148,4 +158,18 @@ button {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+
+.user-icon {
+  cursor: pointer;
+  padding-left: 10px; 
+  margin: 20px;       
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  /* Style your dropdown menu */
+}
+
 </style>
