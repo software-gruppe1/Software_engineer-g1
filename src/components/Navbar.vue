@@ -30,20 +30,24 @@
 
         <!-- Conditional Rendering for Login Button or User Icon -->
         <div v-if="isLoggedIn">
-          <img src="/images/person-square.svg" @click="toggleDropdown" class="user-icon">
+          <img src="/images/person-square.svg" @click.stop="toggleDropdown" class="user-icon">
           <span class="username">{{ accountDetails.username }}</span>
-          <div v-if="showDropdown" class="dropdown-menu">
+          <div v-if="showDropdown" :class="{'user-dropdown': true, 'show': showDropdown}" ref="dropdownMenu">
+            <a class="dropdown-item" href="#">Hi {{ accountDetails.fullName }}</a>
+            <a class="dropdown-item" href="/orders">Orders</a>
+            <span class="dropdown-item logout-css" @click="logout()">Log out</span>
             <div v-if="accountDetails && accountDetails.role === 'Admin'">Admin Options</div>
-            <div v-else>User Options</div>
+            
           </div>
         </div>
+        
         <button v-else class="btn btn-outline-primary ms-2" @click="showLoginModal = true">Login</button>
+        
         <div v-if="isLoggedIn" class="cart-info">
           <img src="/images/cart.svg" alt="Cart" class="cart-icon">
           <span v-if="accountDetails.shopping_cart">{{ accountDetails.shopping_cart.totalPrice }}</span>
         </div>
       </div>
-    
     </div>
 
     <!-- Login Modal -->
@@ -56,7 +60,6 @@
     </div>
   </nav>
 </template>
-
 
 <script>
 export default {
@@ -82,6 +85,7 @@ export default {
         if (account) {
           this.isLoggedIn = true;
           this.accountDetails = account;
+          localStorage.setItem('accountDetails', JSON.stringify(account));
         }
       } catch (error) {
         console.error('Fetch error:', error);
@@ -90,40 +94,65 @@ export default {
     },
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
+      console.log('Dropdown toggled. Current state:', this.showDropdown);
     },
+    handleClickOutside(event) {
+      const dropdownElement = this.$refs.dropdownMenu;
+      if (dropdownElement && !dropdownElement.contains(event.target)) {
+        this.showDropdown = false;
+        console.log('Clicked outside. Dropdown closed.');
+      }
+    },
+    
+    logout() {
+  console.log("Logout method called");
+  localStorage.removeItem('accountDetails');
+  this.isLoggedIn = false;
+  this.accountDetails = null;
+  window.location.reload();
   },
+  },
+  mounted() {
+  const storedAccount = localStorage.getItem('accountDetails');
+  if (storedAccount) {
+    this.accountDetails = JSON.parse(storedAccount);
+    this.isLoggedIn = true;
+  }
+  document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
+  },
+
+
+
 };
 </script>
 
-
 <style scoped>
-
-
 .navbar-brand .navbar-logo {
-  height: 40px; /* Adjust this value to control the size of the logo */
-  width: auto; /* This will maintain the aspect ratio of the image */
+  height: 40px;
+  width: auto;
 }
 
-/* Modal styles */
 .modal {
-  display: block; /* Show the modal */
-  position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  display: block;
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 30%; /* Could be more or less, depending on screen size */
+  width: 30%;
 }
 
 .close {
@@ -141,28 +170,24 @@ export default {
 }
 
 .btn-outline-primary {
-  padding: 0.5rem 1rem; /* Adjust padding to control height and width */
-  width: auto; /* Auto width based on content, or you can set a specific width */
-  /* Add any additional styling you want for the button here */
+  padding: 0.5rem 1rem;
+  width: auto;
 }
 
 .form-control {
-  padding: 0.375rem 0.75rem; /* Smaller padding to reduce height */
-  height: 3rem; /* Adjust height if needed, or keep it auto */
-  width: 300%; /* Full width of its container */
-  max-width: 500px; /* Maximum width it can expand to */
+  padding: 0.375rem 0.75rem;
+  height: 3rem;
+  width: 300%;
+  max-width: 500px;
   margin-top: 0.5rem;
-  /* Add any additional styling you want for the input here */
 }
 
-/* Button styles for the modal */
 button {
   margin-top: 10px;
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
 }
-
 
 .user-icon {
   cursor: pointer;
@@ -171,9 +196,14 @@ button {
 }
 
 .dropdown-menu {
+  display: none;
   position: absolute;
+  top: 100%;
   right: 0;
-  /* Style your dropdown menu */
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
 .cart-info {
@@ -183,8 +213,35 @@ button {
 }
 
 .cart-icon {
-  width: 20px; /* Adjust the size as needed */
+  width: 20px;
   height: auto;
   margin-right: 5px;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 190px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .user-dropdown.show {
+    display: block;
+    margin-right: 405px;
+  }
+
+
+  .logout-css {
+  cursor: pointer;
+  color: #007bff; /* Bootstrap primary color for link-like appearance */
+}
+
+.logout-css:hover {
+  color: #0056b3; /* Darker shade for hover effect */
+  text-decoration: underline;
 }
 </style>
