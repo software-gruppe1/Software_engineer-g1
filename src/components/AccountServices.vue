@@ -2,11 +2,13 @@
     <div v-if="services.length === 0">Loading services...</div>
     <div v-else class="service-container">
       <div v-for="service in filteredServices" :key="service.uid" class="service-card">
+        <div v-if="service.account === accountDetails.username">
         <h3>{{ service.serviceName }}</h3>
         <p>{{ service.description }}</p>
         <p>Location: {{ service.location }}</p>
         <p>Date: {{ service.date }}</p>
         <p>Price: {{ service.price }}</p>
+      </div>
       </div>
     </div>
   </template>
@@ -17,18 +19,23 @@
     data() {
       return {
         services: [],
-        accountDetails: null, // Initialize accountDetails
+        accountDetails: null,
       };
     },
     computed: {
-        filteredServices() {
-    return this.services; // Temporarily return all services
-  }
+      filteredServices() {
+        if (this.accountDetails && this.accountDetails.account) {
+          return this.services.filter(service => service.account === this.accountDetails.account);
+        } else {
+          console.log("No account details found or account property missing.");
+          return this.services; // or return []; if you want to show no services when account details are missing
+        }
+      }
     },
     mounted() {
-      // Retrieve accountDetails from localStorage
       const storedAccount = localStorage.getItem('accountDetails');
       if (storedAccount) {
+        console.log(storedAccount)
         this.accountDetails = JSON.parse(storedAccount);
       }
   
