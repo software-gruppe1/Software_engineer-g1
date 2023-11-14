@@ -2,9 +2,9 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
       <!-- Logo -->
-      <a class="navbar-brand" href="#">
-        <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
-      </a>
+      <router-link class="navbar-brand" to="/Home">
+      <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
+        </router-link>
 
       <!-- Navbar Toggle for Mobile View -->
       <button class="navbar-toggler" type="button" @click="isNavOpen = !isNavOpen"
@@ -17,8 +17,17 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Navigation Links -->
           <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          
+          
+          
           <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+          
+          
+          <li class="nav-item">
+          <router-link class="nav-link" to="/services">Services</router-link>
+          </li>
+          
+          
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
 
@@ -33,7 +42,8 @@
           <img src="/images/person-square.svg" @click.stop="toggleDropdown" class="user-icon">
           <span class="username">{{ accountDetails.username }}</span>
           <div v-if="showDropdown" :class="{'user-dropdown': true, 'show': showDropdown}" ref="dropdownMenu">
-            <a class="dropdown-item" href="#">Hi {{ accountDetails.fullName }}</a>
+            <a class="dropdown-item no-pointer">Hi {{ accountDetails.fullName }}</a>
+            <router-link class="dropdown-item" to="/services">Services</router-link>
             <a class="dropdown-item" href="/orders">Orders</a>
             <span class="dropdown-item logout-css" @click="logout()">Log out</span>
             <div v-if="accountDetails && accountDetails.role === 'Admin'">Admin Options</div>
@@ -222,7 +232,7 @@ button {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    right: 24.2%;
     background-color: #f9f9f9;
     min-width: 190px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -231,7 +241,7 @@ button {
 
   .user-dropdown.show {
     display: block;
-    margin-right: 405px;
+    
   }
 
 
@@ -243,5 +253,9 @@ button {
 .logout-css:hover {
   color: #0056b3; /* Darker shade for hover effect */
   text-decoration: underline;
+}
+
+.no-pointer {
+  cursor: default;
 }
 </style>
