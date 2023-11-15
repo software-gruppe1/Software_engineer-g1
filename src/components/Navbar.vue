@@ -101,6 +101,7 @@ export default {
         console.error('Fetch error:', error);
       }
       this.showLoginModal = false;
+      location.reload();
     },
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
