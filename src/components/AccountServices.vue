@@ -1,6 +1,9 @@
 <template>
   <div class="services-box">
     <h2 class="services-title">Your Services ({{ nonEmptyServiceCount }})</h2>
+    <div class="button-container">
+      <button class="modern-button" @click="yourButtonClickHandler">Make Services</button>
+    </div>
     <div v-if="services.length === 0">Loading services...</div>
     <div v-else class="service-container">
       <div v-for="service in filteredServices" :key="service.uid" class="service-card">
@@ -134,6 +137,29 @@ export default {
 
 .router-link-active, .router-link-exact-active, a {
   text-decoration: none;
+}
+
+.modern-button {
+  background-color: #198754; /* Green background */
+  color: white; /* White text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+}
+
+.modern-button:hover {
+  background-color: #146c43; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 25px;
 }
 </style>
 
