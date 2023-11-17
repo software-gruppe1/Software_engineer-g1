@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import services from './views/services.vue';
 import HomePage from './views/HomePage.vue'; // Import the HomePage component
+import ServiceFormPage from './views/ServiceFormPage.vue'; // Import the ServiceFormPage component
 
 const routes = [
-    {
-        path: '/',
-        redirect: '/Home' // Redirect from root to /home
-      },
+  {
+    path: '/',
+    redirect: '/Home' // Redirect from root to /home
+  },
   {
     path: '/Home',
     name: 'Home',
@@ -17,7 +18,11 @@ const routes = [
     name: 'services',
     component: services
   },
-  // ... other routes
+  {
+    path: '/service-form', // Define the path for the service form
+    name: 'ServiceFormPage', // Define a name for the route
+    component: ServiceFormPage // Associate the component with the route
+  },
 ];
 
 const router = createRouter({

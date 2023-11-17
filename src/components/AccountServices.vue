@@ -2,7 +2,7 @@
   <div class="services-box">
     <h2 class="services-title">Your Services ({{ nonEmptyServiceCount }})</h2>
     <div class="button-container">
-      <button class="modern-button" @click="yourButtonClickHandler">Make Services</button>
+      <button class="modern-button" @click="navigateToServiceForm">Make Services</button>
     </div>
     <div v-if="services.length === 0">Loading services...</div>
     <div v-else class="service-container">
@@ -10,7 +10,7 @@
         <div v-if="service.account === accountDetails.username">
           <router-link :to="`/${formatServiceNameToURL(service.serviceName)}`" >
           <h3>{{ service.serviceName }}</h3>
-          <img :src="`/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
+          <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
           <p>{{ service.description }}</p>
           <p>Location: {{ service.location }}</p>
           <p>Date: {{ service.date }}</p>
@@ -48,9 +48,36 @@ export default {
     }
   },
   methods: {
+    navigateToServiceForm() {
+      this.$router.push({ name: 'ServiceFormPage' });
+    },
+
     formatServiceNameToURL(serviceName) {
       return serviceName.toLowerCase().replace(/\s+/g, '-');
-    }
+    },
+    
+    fetchServiceImages() {
+      this.services.forEach(service => {
+        // Assuming each service has a unique identifier in `service.uid`
+        fetch(`http://localhost:8080/images/${service.uid}.png`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.blob();
+          })
+          .then(imageBlob => {
+            // Convert blob to URL and assign it to the service object
+            service.imageUrl = URL.createObjectURL(imageBlob);
+          })
+          .catch(error => {
+            console.error('Error fetching image:', error);
+            service.imageUrl = ''; // Handle missing image case
+          });
+      });
+    },
+
+    
   },
   mounted() {
     const storedAccount = localStorage.getItem('accountDetails');
@@ -68,6 +95,7 @@ export default {
       })
       .then(data => {
         this.services = data;
+        this.fetchServiceImages();
       })
       .catch(error => {
         console.error('Error fetching services:', error);
