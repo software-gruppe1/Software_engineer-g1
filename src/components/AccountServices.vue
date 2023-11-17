@@ -8,7 +8,7 @@
     <div v-else class="service-container">
       <div v-for="service in filteredServices" :key="service.uid" class="service-card">
         <div v-if="service.account === accountDetails.username">
-          <router-link :to="`/${formatServiceNameToURL(service.serviceName)}`" >
+          <router-link :to="`/${formatServiceNameToURL(service.uid)}`" >
           <h3>{{ service.serviceName }}</h3>
           <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
           <p>{{ service.description }}</p>
@@ -16,6 +16,7 @@
           <p>Date: {{ service.date }}</p>
           <p>Price: {{ service.price }}</p>
           </router-link>
+          <button class="delete-button" @click="confirmDelete(service.uid)">Delete</button>
         </div>
       </div>
     </div>
@@ -76,7 +77,43 @@ export default {
           });
       });
     },
+    confirmDelete(serviceId) {
+      if (confirm("Are you sure you want to delete this service?")) {
+        this.deleteService(serviceId);
+      }
+    },
 
+    deleteService(serviceId) {
+      const apiUrl = `http://localhost:8080/admin/services/${serviceId}`;
+      fetch(apiUrl, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        this.services = this.services.filter(service => service.uid !== serviceId);
+      })
+      .catch(error => {
+        console.error('Error deleting service:', error);
+      });
+    },
+    
+    deleteService(serviceId) {
+      const apiUrl = `http://localhost:8080/user/services/${serviceId}`;
+      fetch(apiUrl, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        this.services = this.services.filter(service => service.uid !== serviceId);
+      })
+      .catch(error => {
+        console.error('Error deleting service:', error);
+      });
+    }
     
   },
   mounted() {
@@ -189,6 +226,25 @@ export default {
   width: 100%;
   margin-bottom: 25px;
 }
+
+.delete-button {
+    background-color: #dc3545; /* Red background */
+    color: white; /* White text */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 10px; /* Adjust as needed */
+    display: flex;
+    margin-left: 180px;
+  }
+
+  .service-card h3 {
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  max-width: 100%; 
+}
 </style>
 
-  
