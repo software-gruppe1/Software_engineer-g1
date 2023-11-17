@@ -77,33 +77,33 @@
       },
   
       submitForm() {
-  if (this.serviceData.file) {
-    this.uploadFile(this.serviceData.file, this.serviceData.uid)
-      .then(response => response.text())
-      .then(data => {
-        console.log('Image upload response:', data);
-        return this.submitServiceData();
-      })
-      .then(() => {
-        // Navigate to the services page after successful submission
-        this.$router.push({ name: 'services' });
-      })
-      .catch(error => {
-        console.error('Error uploading file:', error);
-        // Handle file upload error here
-      });
-  } else {
-    this.submitServiceData()
-      .then(() => {
-        // Navigate to the services page after successful submission
-        this.$router.push({ name: 'services' });
-      })
-      .catch(error => {
-        console.error('Error submitting service data:', error);
-        // Handle service data submission error here
-      });
-  }
-}
+      if (this.serviceData.file) {
+        this.uploadFile(this.serviceData.file, this.serviceData.uid)
+          .then(response => response.text())
+          .then(data => {
+            console.log('Image upload response:', data);
+            return this.submitServiceData();
+          })
+          .then(() => {
+            // Redirect to the services page after successful submission
+            this.$router.push({ name: 'services' });
+          })
+          .catch(error => {
+            console.error('Error uploading file:', error);
+            // Handle file upload error
+          });
+      } else {
+        this.submitServiceData()
+          .then(() => {
+            // Redirect to the services page after successful submission
+            this.$router.push({ name: 'services' });
+          })
+          .catch((error) => {
+            console.error('Error creating service:', error);
+            // Handle service creation error
+          });
+      }
+    }
 ,
   
 submitServiceData() {
@@ -120,11 +120,6 @@ submitServiceData() {
       throw new Error('Network response was not ok');
     }
     return response.json();
-  })
-  .then(data => {
-    console.log('Service creation success:', data);
-    // Redirect to services.vue
-    this.$router.push({ name: 'services' }); // Replace 'Services' with your route name
   })
   .catch((error) => {
     console.error('Error creating service:', error);
