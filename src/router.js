@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import services from './views/services.vue';
 import HomePage from './views/HomePage.vue'; // Import the HomePage component
 import ServiceFormPage from './views/ServiceFormPage.vue'; // Import the ServiceFormPage component
+import ServiceDetailPage from './components/ServiceDetailPage.vue';
 
 const routes = [
   {
@@ -23,6 +24,14 @@ const routes = [
     name: 'ServiceFormPage', // Define a name for the route
     component: ServiceFormPage // Associate the component with the route
   },
+
+  
+  {
+    path: '/:uid',
+    name: 'ServiceDetail',
+    component: ServiceDetailPage,
+    props: true
+  }
 ];
 
 const router = createRouter({

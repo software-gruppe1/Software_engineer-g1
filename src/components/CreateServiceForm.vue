@@ -68,7 +68,7 @@
       },
   
       generateUID(length) {
-        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
         for (let i = 0; i < length; i++) {
           result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -121,9 +121,16 @@ submitServiceData() {
     }
     return response.json();
   })
-  .catch((error) => {
-    console.error('Error creating service:', error);
-  });
+  .then(data => {
+      console.log('Service created successfully:', data);
+
+      // Set the flag in localStorage and navigate to AccountServices
+      localStorage.setItem('refreshNeeded', 'true');
+      this.$router.push({ name: 'AccountServices' });
+    })
+    .catch((error) => {
+      console.error('Error creating service:', error);
+    });
 },
   
       getCurrentUserAccount() {

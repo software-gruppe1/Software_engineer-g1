@@ -34,17 +34,16 @@ export default {
   },
   computed: {
     filteredServices() {
-      if (this.accountDetails && this.accountDetails.account) {
-        return this.services.filter(service => service.account === this.accountDetails.account);
+      if (this.accountDetails && this.accountDetails.username) {
+        return this.services.filter(service => service.account === this.accountDetails.username);
       } else {
-        console.log("No account details found or account property missing.");
-        return this.services; // or return []; if you want to show no services when account details are missing
+        console.log("No account details found or username property missing.");
+        return [];
       }
     },
     nonEmptyServiceCount() {
       return this.filteredServices.filter(service => {
-        return service.account === this.accountDetails.username &&
-               (service.serviceName || service.description || service.location || service.date || service.price);
+        return service.serviceName || service.description || service.location || service.date || service.price;
       }).length;
     }
   },
@@ -56,10 +55,9 @@ export default {
     formatServiceNameToURL(serviceName) {
       return serviceName.toLowerCase().replace(/\s+/g, '-');
     },
-    
+
     fetchServiceImages() {
       this.services.forEach(service => {
-        // Assuming each service has a unique identifier in `service.uid`
         fetch(`http://localhost:8080/images/${service.uid}.png`)
           .then(response => {
             if (!response.ok) {
@@ -68,7 +66,6 @@ export default {
             return response.blob();
           })
           .then(imageBlob => {
-            // Convert blob to URL and assign it to the service object
             service.imageUrl = URL.createObjectURL(imageBlob);
           })
           .catch(error => {
@@ -77,6 +74,7 @@ export default {
           });
       });
     },
+
     confirmDelete(serviceId) {
       if (confirm("Are you sure you want to delete this service?")) {
         this.deleteService(serviceId);
@@ -92,54 +90,61 @@ export default {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        this.services = this.services.filter(service => service.uid !== serviceId);
+        window.location.reload(); // Refresh the services list after deletion
       })
       .catch(error => {
         console.error('Error deleting service:', error);
       });
     },
-    
-    deleteService(serviceId) {
-      const apiUrl = `http://localhost:8080/user/services/${serviceId}`;
-      fetch(apiUrl, {
-        method: 'DELETE',
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        this.services = this.services.filter(service => service.uid !== serviceId);
-      })
-      .catch(error => {
-        console.error('Error deleting service:', error);
-      });
-    }
-    
-  },
-  mounted() {
-    const storedAccount = localStorage.getItem('accountDetails');
-    if (storedAccount) {
-      console.log(storedAccount)
-      this.accountDetails = JSON.parse(storedAccount);
-    }
 
-    fetch('http://localhost:8080/advertisement/services/all')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        this.services = data;
-        this.fetchServiceImages();
-      })
-      .catch(error => {
-        console.error('Error fetching services:', error);
-      });
+    fetchServices() {
+      fetch('http://localhost:8080/advertisement/services/all')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.services = data;
+          this.fetchServiceImages();
+        })
+        .catch(error => {
+          console.error('Error fetching services:', error);
+        });
+    }
+  },
+
+  mounted() {
+  const storedAccount = localStorage.getItem('accountDetails');
+  if (storedAccount) {
+    this.accountDetails = JSON.parse(storedAccount);
   }
+
+  fetch('http://localhost:8080/advertisement/services/all')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      this.services = data;
+      this.fetchServiceImages();
+    })
+    .catch(error => {
+      console.error('Error fetching services:', error);
+    });
+
+  // Check if a refresh is needed
+  if (localStorage.getItem('refreshNeeded') === 'true') {
+    localStorage.setItem('refreshNeeded', 'false'); // Reset the flag
+    window.location.reload();
+  }
+}
 };
 </script>
+
 
   
   <style>
