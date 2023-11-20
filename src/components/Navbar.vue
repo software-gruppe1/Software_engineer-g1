@@ -55,7 +55,7 @@
         
         <div v-if="isLoggedIn" class="cart-info">
           <img src="/images/cart.svg" alt="Cart" class="cart-icon">
-          <span v-if="accountDetails.shopping_cart">{{ accountDetails.shopping_cart.totalPrice }}</span>
+          <span v-if="accountDetails.shopping_cart" style="margin-left: 10px;">{{ accountDetails.shopping_cart.totalPrice }}</span>
         </div>
       </div>
     </div>
@@ -227,6 +227,8 @@ button {
   width: 20px;
   height: auto;
   margin-right: 5px;
+  width: 27px;  /* Adjust the size as needed */
+    height: 27px;
 }
 
 .user-dropdown {
@@ -258,5 +260,9 @@ button {
 
 .no-pointer {
   cursor: default;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
 }
 </style>
