@@ -31,6 +31,19 @@
         </form>
 
         <!-- Conditional Rendering for Login Button or User Icon -->
+        <div v-if="isLoggedIn">
+          <img src="/images/person-square.svg" @click.stop="toggleDropdown" class="user-icon">
+          <span class="username">{{ accountDetails.username }}</span>
+          <div v-if="showDropdown" :class="{'user-dropdown': true, 'show': showDropdown}" ref="dropdownMenu">
+            <a class="dropdown-item no-pointer">Hi {{ accountDetails.fullName }}</a>
+            <router-link class="dropdown-item" to="/services">Services</router-link>
+            <a class="dropdown-item" href="/orders">Orders</a>
+            <span class="dropdown-item logout-css" @click="logout()">Log out</span>
+            <div v-if="accountDetails && accountDetails.role === 'Admin'">Admin Options</div>
+            
+          </div>
+        </div>
+
         <div v-if="isLoggedIn" class="cart-info" @mouseover="showCartDropdown = true" @mouseleave="showCartDropdown = false">
           <img src="/images/cart.svg" alt="Cart" class="cart-icon">
           <span v-if="accountDetails.shopping_cart" class="margin-left-10">{{ accountDetails.shopping_cart.totalPrice }}</span>
@@ -40,7 +53,7 @@
               <span>{{ item.price }}</span>
             </div>
             <div class="cart-total">
-              Total: {{ totalPrice }}
+              Total: {{ accountDetails.shopping_cart.totalPrice }}
             </div>
             <button @click="goToCheckout" class="checkout-button">Go to Checkout</button>
           </div>
@@ -81,6 +94,7 @@ export default {
       return this.cartItems.reduce((total, item) => total + item.price, 0);
     },
   },
+  
   methods: {
     async login(role) {
       try {
@@ -119,6 +133,32 @@ export default {
       this.accountDetails = null;
       window.location.reload();
     },
+    async refreshAccountDetails() {
+    try {
+      // Replace with the actual API endpoint to fetch account details
+      const url = `http://localhost:8080/user/account/${this.accountDetails.username}`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Add any required headers, like authorization tokens
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedAccountDetails = await response.json();
+
+      // Update local storage
+      localStorage.setItem('accountDetails', JSON.stringify(updatedAccountDetails));
+
+      // Update component state
+      this.accountDetails = updatedAccountDetails;
+    } catch (error) {
+      console.error('Error fetching updated account details:', error);
+    }
+  }
   },
   mounted() {
     const storedAccount = localStorage.getItem('accountDetails');
@@ -131,6 +171,8 @@ export default {
   beforeDestroy() {
     document.removeEventListener('click', this.handleClickOutside);
   },
+
+  
 };
 </script>
 
@@ -197,7 +239,8 @@ button {
 .user-icon {
   cursor: pointer;
   padding-left: 10px; 
-  margin: 20px;       
+  margin: 20px;
+  position: relative;       
 }
 
 .dropdown-menu {
@@ -226,15 +269,15 @@ button {
 }
 
 .user-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 24.2%;
-    background-color: #f9f9f9;
-    min-width: 190px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
+  display: none;
+  position: absolute;
+  top: 100%; /* Adjust this to position the dropdown below the icon */
+  left: 71.5%; /* Align with the left edge of the user-icon */
+  background-color: #f9f9f9;
+  min-width: 190px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
   .user-dropdown.show {
     display: block;

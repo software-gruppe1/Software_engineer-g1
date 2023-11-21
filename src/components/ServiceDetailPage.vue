@@ -8,6 +8,7 @@
           <p id="service-location">Location: {{ service.location }}</p>
           <p id="service-date">Date: {{ service.date }}</p>
           <p id="service-price">Price: {{ service.price }}</p>
+          <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
           <div id="service-reviews">
             <h2>Reviews</h2>
             <ul>
@@ -32,6 +33,7 @@ export default {
   data() {
     return {
       service: null,
+      accountDetails: null,
     };
   },
   methods: {
@@ -51,12 +53,64 @@ export default {
           console.error('Error fetching data:', error);
           this.service = null; // or handle the error differently
         });
+    },
+    async addToCart(username, UID) {
+    const url = `http://localhost:8080/user/cart/${username}/${UID}`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await this.refreshAccountDetails();
+      console.log('Item added to cart and account details refreshed');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
     }
+  },
+  async refreshAccountDetails() {
+    try {
+      // Replace with the actual API endpoint to fetch account details
+      const url = `http://localhost:8080/user/account/${this.accountDetails.username}`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // Add any required headers, like authorization tokens
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedAccountDetails = await response.json();
+
+      // Update local storage
+      localStorage.setItem('accountDetails', JSON.stringify(updatedAccountDetails));
+
+      // Update component state
+      this.accountDetails = updatedAccountDetails;
+    } catch (error) {
+      console.error('Error fetching updated account details:', error);
+    }
+  }
   },
   mounted() {
     const uid = this.$route.params.uid;
     console.log('UID:', uid); // Log the UID to the console
     this.fetchServiceData(uid);
+
+    const storedAccount = localStorage.getItem('accountDetails');
+  if (storedAccount) {
+    this.accountDetails = JSON.parse(storedAccount);
+  }
   }
 };
 </script>
@@ -140,7 +194,26 @@ strong {
   color: #198754; /* Theme color for emphasis */
 }
 
+#add-to-cart-button {
+  background-color: #198754; /* Green background, you can choose any color */
+  color: white; /* White text for contrast */
+  border: none; /* No border for a modern look */
+  padding: 10px 20px; /* Comfortable padding */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1em; /* Appropriate font size */
+  cursor: pointer; /* Cursor changes to pointer to indicate it's clickable */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
 
+#add-to-cart-button:hover {
+  background-color: #146c43; /* Slightly darker shade of green on hover */
+  transform: scale(1.05); /* Slightly increase size on hover for a dynamic effect */
+}
+
+#add-to-cart-button:focus {
+  outline: none; /* Remove outline to maintain the modern look */
+  box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.5); /* Subtle shadow to indicate focus */
+}
 
   </style>
   
