@@ -3,8 +3,8 @@
     <div class="container">
       <!-- Logo -->
       <router-link class="navbar-brand" to="/Home">
-      <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
-        </router-link>
+        <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
+      </router-link>
 
       <!-- Navbar Toggle for Mobile View -->
       <button class="navbar-toggler" type="button" @click="isNavOpen = !isNavOpen"
@@ -17,17 +17,10 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Navigation Links -->
           <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          
-          
-          
           <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-          
-          
           <li class="nav-item">
-          <router-link class="nav-link" to="/services">Services</router-link>
+            <router-link class="nav-link" to="/services">Services</router-link>
           </li>
-          
-          
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
 
@@ -38,25 +31,22 @@
         </form>
 
         <!-- Conditional Rendering for Login Button or User Icon -->
-        <div v-if="isLoggedIn">
-          <img src="/images/person-square.svg" @click.stop="toggleDropdown" class="user-icon">
-          <span class="username">{{ accountDetails.username }}</span>
-          <div v-if="showDropdown" :class="{'user-dropdown': true, 'show': showDropdown}" ref="dropdownMenu">
-            <a class="dropdown-item no-pointer">Hi {{ accountDetails.fullName }}</a>
-            <router-link class="dropdown-item" to="/services">Services</router-link>
-            <a class="dropdown-item" href="/orders">Orders</a>
-            <span class="dropdown-item logout-css" @click="logout()">Log out</span>
-            <div v-if="accountDetails && accountDetails.role === 'Admin'">Admin Options</div>
-            
+        <div v-if="isLoggedIn" class="cart-info" @mouseover="showCartDropdown = true" @mouseleave="showCartDropdown = false">
+          <img src="/images/cart.svg" alt="Cart" class="cart-icon">
+          <span v-if="accountDetails.shopping_cart" class="margin-left-10">{{ accountDetails.shopping_cart.totalPrice }}</span>
+          <div v-if="showCartDropdown" class="cart-dropdown">
+            <div v-for="item in cartItems" :key="item.id" class="cart-item">
+              <span>{{ item.name }}</span>
+              <span>{{ item.price }}</span>
+            </div>
+            <div class="cart-total">
+              Total: {{ totalPrice }}
+            </div>
+            <button @click="goToCheckout" class="checkout-button">Go to Checkout</button>
           </div>
         </div>
-        
+
         <button v-else class="btn btn-outline-primary ms-2" @click="showLoginModal = true">Login</button>
-        
-        <div v-if="isLoggedIn" class="cart-info">
-          <img src="/images/cart.svg" alt="Cart" class="cart-icon">
-          <span v-if="accountDetails.shopping_cart" style="margin-left: 10px;">{{ accountDetails.shopping_cart.totalPrice }}</span>
-        </div>
       </div>
     </div>
 
@@ -71,6 +61,7 @@
   </nav>
 </template>
 
+
 <script>
 export default {
   name: 'Navbar',
@@ -81,7 +72,14 @@ export default {
       isLoggedIn: false,
       showDropdown: false,
       accountDetails: null,
+      showCartDropdown: false,
+      cartItems: [],
     };
+  },
+  computed: {
+    totalPrice() {
+      return this.cartItems.reduce((total, item) => total + item.price, 0);
+    },
   },
   methods: {
     async login(role) {
@@ -114,29 +112,25 @@ export default {
         console.log('Clicked outside. Dropdown closed.');
       }
     },
-    
     logout() {
-  console.log("Logout method called");
-  localStorage.removeItem('accountDetails');
-  this.isLoggedIn = false;
-  this.accountDetails = null;
-  window.location.reload();
-  },
+      console.log("Logout method called");
+      localStorage.removeItem('accountDetails');
+      this.isLoggedIn = false;
+      this.accountDetails = null;
+      window.location.reload();
+    },
   },
   mounted() {
-  const storedAccount = localStorage.getItem('accountDetails');
-  if (storedAccount) {
-    this.accountDetails = JSON.parse(storedAccount);
-    this.isLoggedIn = true;
-  }
-  document.addEventListener('click', this.handleClickOutside);
+    const storedAccount = localStorage.getItem('accountDetails');
+    if (storedAccount) {
+      this.accountDetails = JSON.parse(storedAccount);
+      this.isLoggedIn = true;
+    }
+    document.addEventListener('click', this.handleClickOutside);
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handleClickOutside);
   },
-
-
-
 };
 </script>
 
@@ -264,5 +258,57 @@ button {
 
 .margin-left-10 {
     margin-left: 10px;
+}
+
+.cart-dropdown {
+  position: absolute;
+  top: 100%; /* Position directly below the cart icon */
+  left: 50%; /* Start from the middle of the cart icon */
+  transform: translateX(-50%); /* Shift the dropdown back by half of its width */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 200px; /* Adjust as needed */
+  display: none; /* Initially hidden */
+  flex-direction: column;
+}
+
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .cart-total {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .checkout-button {
+    background-color: #198754; /* Green background */
+    color: white; /* White text */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+
+  .checkout-button:hover {
+    background-color: #146c43; /* Darker green on hover */
+  }
+
+  .cart-info {
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+  position: relative; /* Ensure relative positioning for the dropdown */
+}
+
+  .cart-info:hover .cart-dropdown {
+  display: flex; /* Show dropdown on hover */
 }
 </style>
