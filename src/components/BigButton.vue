@@ -1,18 +1,20 @@
 <!-- src/components/BigButton.vue -->
 <template>
     <div class="button-container">
-      <button class="big-button btn"> Uncover thrilling new destinations for your tourist journey</button> <!-- Added the .btn class -->
+      <button class="big-button btn" @click="navigateToViewAllServices"> Uncover thrilling new destinations for your tourist journey</button> <!-- Added the .btn class -->
     </div>
   </template>
   
   <script>
-  export default {
-    name: 'BigButton',
-    methods: {
-      // You might define methods here
+export default {
+  name: 'BigButton',
+  methods: {
+    navigateToViewAllServices() {
+      this.$router.push({ name: 'ViewAllServices' }); // Use the route name or path of your ViewAllServices component
     }
   }
-  </script>
+}
+</script>
   
   <style scoped>
   

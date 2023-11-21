@@ -82,7 +82,7 @@ export default {
     },
 
     deleteService(serviceId) {
-      const apiUrl = `http://localhost:8080/admin/services/${serviceId}`;
+      const apiUrl = `http://localhost:8080/user/services/${this.accountDetails.username}/${serviceId}`;
       fetch(apiUrl, {
         method: 'DELETE',
       })

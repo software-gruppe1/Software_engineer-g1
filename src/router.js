@@ -3,6 +3,7 @@ import services from './views/services.vue';
 import HomePage from './views/HomePage.vue'; // Import the HomePage component
 import ServiceFormPage from './views/ServiceFormPage.vue'; // Import the ServiceFormPage component
 import ServiceDetailPage from './components/ServiceDetailPage.vue';
+import ViewAllServices from './views/ViewAllServices.vue';
 
 const routes = [
   {
@@ -31,6 +32,12 @@ const routes = [
     name: 'ServiceDetail',
     component: ServiceDetailPage,
     props: true
+  },
+
+  {
+    path: '/view-all-services',
+    name: 'ViewAllServices',
+    component: ViewAllServices
   }
 ];
 
