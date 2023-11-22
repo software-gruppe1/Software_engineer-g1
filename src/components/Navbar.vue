@@ -48,14 +48,17 @@
           <img src="/images/cart.svg" alt="Cart" class="cart-icon">
           <span v-if="accountDetails.shopping_cart" class="margin-left-10">{{ accountDetails.shopping_cart.totalPrice }}</span>
           <div v-if="showCartDropdown" class="cart-dropdown">
-            <div v-for="item in cartItems" :key="item.id" class="cart-item">
-              <span>{{ item.name }}</span>
-              <span>{{ item.price }}</span>
+            <div v-for="uid in accountDetails.shopping_cart.services" :key="uid" class="cart-item">
+              <div v-for="item in services" :key="item.id">
+                <div v-if="item.uid === uid">
+                  <span class="service-item">{{ item.serviceName }} <span class="price">{{ item.price }}</span> </span>
+                </div>
+              </div>
             </div>
             <div class="cart-total">
               Total: {{ accountDetails.shopping_cart.totalPrice }}
             </div>
-            <button @click="goToCheckout" class="checkout-button">Go to Checkout</button>
+            <button @click="goToCheckout" class="pay-button">Pay</button>
           </div>
         </div>
 
@@ -86,7 +89,7 @@ export default {
       showDropdown: false,
       accountDetails: null,
       showCartDropdown: false,
-      cartItems: [],
+      services: [],
     };
   },
   computed: {
@@ -158,13 +161,30 @@ export default {
     } catch (error) {
       console.error('Error fetching updated account details:', error);
     }
-  }
+  },
+  fetchServices() {
+      fetch('http://localhost:8080/advertisement/services/all')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.services = data;
+        })
+        .catch(error => {
+          console.error('Error fetching services:', error);
+        });
+    },
   },
   mounted() {
     const storedAccount = localStorage.getItem('accountDetails');
     if (storedAccount) {
       this.accountDetails = JSON.parse(storedAccount);
       this.isLoggedIn = true;
+      this.fetchServices();
+      console.log(this.services);
     }
     document.addEventListener('click', this.handleClickOutside);
   },
@@ -272,7 +292,7 @@ button {
   display: none;
   position: absolute;
   top: 100%; /* Adjust this to position the dropdown below the icon */
-  left: 71.5%; /* Align with the left edge of the user-icon */
+  left: 66.7%; /* Align with the left edge of the user-icon */
   background-color: #f9f9f9;
   min-width: 190px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -313,23 +333,24 @@ button {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  width: 200px; /* Adjust as needed */
+  width: 300px; /* Adjust as needed */
   display: none; /* Initially hidden */
   flex-direction: column;
 }
 
-  .cart-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-  }
+.cart-item {
+  border-bottom: 1px solid #ddd; /* Add a bottom border to each item */
+  padding: 10px 0; /* Add some padding for spacing */
+  display: flex;
+  align-items: center;
+}
 
   .cart-total {
     margin-top: 10px;
     font-weight: bold;
   }
 
-  .checkout-button {
+  .pay-button {
     background-color: #198754; /* Green background */
     color: white; /* White text */
     border: none;
@@ -340,7 +361,7 @@ button {
     align-self: flex-end;
   }
 
-  .checkout-button:hover {
+  .pay-button:hover {
     background-color: #146c43; /* Darker green on hover */
   }
 
@@ -353,5 +374,38 @@ button {
 
   .cart-info:hover .cart-dropdown {
   display: flex; /* Show dropdown on hover */
+}
+
+.cart-item:last-child {
+  border-bottom: none; /* Remove border for the last item */
+}
+
+.cart-item span {
+  font-family: 'Arial', sans-serif; /* Use a modern font */
+}
+
+.service-item {
+  font-family: 'Arial', sans-serif; 
+  color: #198754; 
+  background-color: white; 
+  padding: 5px 10px; 
+  border-radius: 5px; 
+  display: inline-block; 
+  margin: 5px; 
+  font-size: 1rem; 
+}
+
+.service-item::after {
+  content: ',-'; 
+  color: black; /* Black color for the price */
+  font-weight: bold;
+}
+
+.price {
+  color: black; /* Black color for the price */
+  font-size: 1.1rem; /* Standard font size for price */
+  font-weight: bold;
+  margin-left: 10px;
+  
 }
 </style>
