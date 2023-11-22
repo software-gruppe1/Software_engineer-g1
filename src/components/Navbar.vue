@@ -58,7 +58,7 @@
             <div class="cart-total">
               Total: {{ accountDetails.shopping_cart.totalPrice }}
             </div>
-            <button @click="goToCheckout" class="pay-button">Pay</button>
+            <button @click="createOrder" class="pay-button">Pay</button>
           </div>
         </div>
 
@@ -177,6 +177,28 @@ export default {
           console.error('Error fetching services:', error);
         });
     },
+    async createOrder() {
+    const url = `http://localhost:8080/user/order/${this.accountDetails.username}`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await this.refreshAccountDetails();
+      console.log('order created and account details refreshed');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error could not create order:', error);
+    }
+  },
+    
   },
   mounted() {
     const storedAccount = localStorage.getItem('accountDetails');
