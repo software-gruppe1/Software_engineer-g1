@@ -2,7 +2,7 @@
     <div>
       <create-service-form />
     </div>
-  </template>
+</template>
 
 <script>
 import Navbar from '../components/Navbar.vue';

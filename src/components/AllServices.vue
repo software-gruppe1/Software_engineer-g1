@@ -54,6 +54,7 @@ export default {
     confirmDelete(serviceId) {
       if (confirm("Are you sure you want to delete this service?")) {
         this.deleteService(serviceId);
+        //this.deletePicture(serviceId);
       }
     },
 
@@ -73,6 +74,23 @@ export default {
           throw new Error('Network response was not ok');
         }
         window.location.reload(); // Refresh the services list after deletion
+      })
+      .catch(error => {
+        console.error('Error deleting service:', error);
+      });
+    },
+    deletePicture(serviceId) {
+      let apiUrl;
+        apiUrl = `/delete-image/${serviceId}`;
+
+      fetch(apiUrl, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        window.location.reload();
       })
       .catch(error => {
         console.error('Error deleting service:', error);

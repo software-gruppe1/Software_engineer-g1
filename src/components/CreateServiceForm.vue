@@ -41,9 +41,9 @@
           date: '',
           price: '',
           account: this.getCurrentUserAccount(),
-          uid: '',
-          file: null
-        }
+          uid: ''
+        },
+        file: null
       };
     },
     methods: {
@@ -126,7 +126,7 @@ submitServiceData() {
 
       // Set the flag in localStorage and navigate to AccountServices
       localStorage.setItem('refreshNeeded', 'true');
-      this.$router.push({ name: 'AccountServices' });
+      
     })
     .catch((error) => {
       console.error('Error creating service:', error);

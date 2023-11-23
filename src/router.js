@@ -4,6 +4,7 @@ import HomePage from './views/HomePage.vue'; // Import the HomePage component
 import ServiceFormPage from './views/ServiceFormPage.vue'; // Import the ServiceFormPage component
 import ServiceDetailPage from './components/ServiceDetailPage.vue';
 import ViewAllServices from './views/ViewAllServices.vue';
+import Orders from './views/Orders.vue'
 
 const routes = [
   {
@@ -38,6 +39,19 @@ const routes = [
     path: '/view-all-services',
     name: 'ViewAllServices',
     component: ViewAllServices
+  },
+
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: Orders
+  },
+
+  {
+    path: '/order/:orderId',
+    name: 'OrderDetails',
+    component: Orders,
+    props: true
   }
 ];
 
