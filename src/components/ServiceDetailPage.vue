@@ -1,39 +1,57 @@
 <template>
-    <div id="outer-container">
-      <div id="service-detail-container">
-        <div v-if="service">
-          <h1 id="service-title">{{ service.serviceName }}</h1>
-          <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" id="service-image"/>
-          <p id="service-description">{{ service.description }}</p>
-          <p id="service-location">Location: {{ service.location }}</p>
-          <p id="service-date">Date: {{ service.date }}</p>
-          <p id="service-price">Price: {{ service.price }}</p>
-          <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
-          <div id="service-reviews">
-            <h2>Reviews</h2>
-            <ul>
-              <li v-for="review in service.reviews" :key="review.id">
-                <strong>{{ review.author }}:</strong> {{ review.content }}
-              </li>
-            </ul>
-          </div>
-          <p id="service-provider">Service provided by: {{ service.provider }}</p>
+  <div id="outer-container">
+    <div id="service-detail-container">
+      <div v-if="service">
+        <h1 id="service-title">{{ service.serviceName }}</h1>
+        <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" id="service-image"/>
+        <p id="service-description">{{ service.description }}</p>
+        <p id="service-location">Location: {{ service.location }}</p>
+        <p id="service-date">Date: {{ service.date }}</p>
+        <p id="service-price">Price: {{ service.price }}</p>
+        <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
+        
+        <div id="service-reviews">
+          <h2>Reviews</h2>
+          <ul>
+            <li v-for="review in service.all_reviews" :key="review.id">
+              <strong>{{ review.name }}:</strong> {{ review.review }}  <star-rating :value="review.rate" isReadOnly></star-rating>
+            </li>
+          </ul>
+          <button @click="openReviewForm" id="make-review-button">Make Review</button>
         </div>
-        <div v-else>
-          <p>Loading service details...</p>
+
+        <!-- Review Form -->
+        <div v-if="showReviewForm" id="review-form">
+          <input type="text" v-model="review.name" placeholder="Your Name" />
+          <star-rating v-model="review.rate"></star-rating>
+          <textarea v-model="review.review" placeholder="Your Review"></textarea>
+          <button @click="submitReview(service.uid)">Submit Review</button>
         </div>
+
+      
+      </div>
+      
+      <div v-else>
+        <p>Loading service details...</p>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
   
   <script>
+import StarRating from '../components/StarRating.vue'; 
 export default {
   name: 'ServiceDetailPage',
+  components: {
+    StarRating
+  },
   data() {
     return {
       service: null,
       accountDetails: null,
+      showReviewForm: false, 
+      review: { name: '', rate: null, review: '' } 
     };
   },
   methods: {
@@ -74,6 +92,7 @@ export default {
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
+    
   },
   async refreshAccountDetails() {
     try {
@@ -100,7 +119,36 @@ export default {
     } catch (error) {
       console.error('Error fetching updated account details:', error);
     }
-  }
+  },
+  openReviewForm() {
+      this.showReviewForm = true;
+    },
+    submitReview(UID) {
+      console.log(this.review);
+  const apiUrl = `http://localhost:8080/advertisement/reviews/${UID}`;
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(this.review),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  })
+  .then(data => {
+      console.log('Service created successfully:', data);
+      this.showReviewForm = false;
+      
+      localStorage.setItem('refreshNeeded', 'true');
+      
+    })
+    .catch((error) => {
+      console.error('Error creating service:', error);
+    });
+},
   },
   mounted() {
     const uid = this.$route.params.uid;
@@ -215,5 +263,83 @@ strong {
   box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.5); /* Subtle shadow to indicate focus */
 }
 
+
+#make-review-button {
+    background-color: #007bff; 
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  #make-review-button:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05); 
+  }
+
+  #review-form {
+    background-color: #fff; 
+    padding: 20px;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    max-width: 400px; 
+    margin: 20px auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+  }
+
+  #review-form input[type="text"],
+  #review-form textarea {
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    padding: 10px; 
+    font-size: 1em; 
+    transition: border-color 0.3s; 
+  }
+
+  #review-form input[type="text"]:focus,
+  #review-form textarea:focus {
+    border-color: #007bff; 
+    outline: none; 
+  }
+
+  #review-form textarea {
+    resize: vertical; 
+    min-height: 100px; 
+  }
+
+  #review-form button {
+    background-color: #198754; 
+    color: white; 
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  #review-form button:hover {
+    background-color:  #0f663c 
+  }
+
+  .star-rating {
+    display: flex;
+    justify-content: center; 
+    gap: 5px; 
+  }
+
+  .star-rating img {
+    width: 30px; 
+    height: auto; 
+    cursor: pointer; 
+    transition: transform 0.2s ease; 
+  }
+
+  .star-rating img:hover {
+    transform: scale(1.1); 
+  }
   </style>
   
