@@ -1,22 +1,20 @@
 <template>
-  <div>
+  <div class="order-details-container">
     <!-- Display details for the specific order -->
     <div v-if="selectedOrder">
       <h1>Order Details</h1>
-      <p>Order ID: {{ selectedOrder.orderId }}</p>
-      <p>Order Date: {{ formatDate(selectedOrder.orderDate) }}</p>
-      <p>Total Price: {{ selectedOrder.totalPrice }}</p>
+      <p class="order-info">Order ID: {{ selectedOrder.orderId }}</p>
+      <p class="order-info">Order Date: {{ formatDate(selectedOrder.orderDate) }}</p>
+      <p class="order-info">Total Price: {{ selectedOrder.totalPrice }}</p>
       <h2>Services:</h2>
-      <ul>
-        <div v-for="(serviceId, index) in selectedOrder.services" :key="index">
+      <ul class="services-list">
+        <li v-for="serviceId in selectedOrder.services" :key="serviceId">
           <div v-for="service in services" :key="service">
             <div v-if="service.uid === serviceId">
-        <li>
-          Service name: {{ service.serviceName }}  Price: {{ service.price }}
+              Service name: {{ service.serviceName }} - Price: {{ service.price }}
+            </div>
+          </div>
         </li>
-      </div>
-      </div>
-      </div>
       </ul>
     </div>
   </div>
@@ -78,3 +76,47 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.order-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-details-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.order-info {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.services-list {
+  list-style: none;
+  padding: 0;
+}
+
+.services-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.services-list li:hover {
+  background-color: #e9e9e9;
+}
+</style>

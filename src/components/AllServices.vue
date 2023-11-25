@@ -54,7 +54,7 @@ export default {
     confirmDelete(serviceId) {
       if (confirm("Are you sure you want to delete this service?")) {
         this.deleteService(serviceId);
-        //this.deletePicture(serviceId);
+        this.deletePicture(serviceId);
       }
     },
 
