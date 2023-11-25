@@ -9,7 +9,7 @@
       <p class="order-info">Total Price: {{ selectedOrder.totalPrice }}</p>
       <h2>Services:</h2>
       <ul class="services-list">
-        <li v-for="serviceDetail in selectedOrder.services" :key="serviceId">
+        <li v-for="serviceDetail in selectedOrder.services" :key="serviceDetail">
               Service name: {{ serviceDetail.serviceName }} - Price: {{ serviceDetail.servicePrice }}
         </li>
       </ul>
