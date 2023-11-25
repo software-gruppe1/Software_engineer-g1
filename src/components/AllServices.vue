@@ -61,7 +61,7 @@ export default {
     deleteService(serviceId) {
       let apiUrl;
       if (this.accountDetails.username === 'Admin') {
-        apiUrl = `http://localhost:8080/admin/services/${serviceId}`;
+        apiUrl = `http://localhost:8080/user/services/Admin/${serviceId}`;
       } else {
         apiUrl = `http://localhost:8080/user/services/${this.accountDetails.username}/${serviceId}`;
       }
