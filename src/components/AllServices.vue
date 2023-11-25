@@ -81,7 +81,7 @@ export default {
     },
     deletePicture(serviceId) {
       let apiUrl;
-        apiUrl = `/delete-image/${serviceId}`;
+        apiUrl = `http://localhost:8080/delete-image/${serviceId}`;
 
       fetch(apiUrl, {
         method: 'DELETE',
