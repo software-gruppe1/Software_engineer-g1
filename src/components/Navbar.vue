@@ -313,12 +313,14 @@ button {
 .user-dropdown {
   display: none;
   position: absolute;
-  top: 100%; /* Adjust this to position the dropdown below the icon */
-  left: 66.7%; /* Align with the left edge of the user-icon */
+  top: 100%; /* Keep this to position the dropdown below the icon */
+  left: 66.7%; /* Keep this to align with the left edge of the user-icon */
   background-color: #f9f9f9;
   min-width: 190px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+  border-radius: 8px; /* Rounded corners for the dropdown */
+  overflow: hidden; /* Ensures the inner content respects the border radius */
 }
 
   .user-dropdown.show {
@@ -429,5 +431,29 @@ button {
   font-weight: bold;
   margin-left: 10px;
   
+}
+
+.user-dropdown li {
+  padding: 10px 15px; 
+  border-bottom: 1px solid #eee;
+  background-color: #f9f9f9; 
+}
+
+.user-dropdown li:hover {
+  background-color: #f0f0f0; 
+}
+
+.user-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -10px; 
+  right: 10px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
 }
 </style>
