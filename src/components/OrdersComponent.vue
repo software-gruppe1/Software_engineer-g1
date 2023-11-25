@@ -1,6 +1,7 @@
 <template>
   <div class="order-details-container">
     <!-- Display details for the specific order -->
+    <button @click="goBack" class="back-button">Back to Orders</button>
     <div v-if="selectedOrder">
       <h1>Order Details</h1>
       <p class="order-info">Order ID: {{ selectedOrder.orderId }}</p>
@@ -62,6 +63,9 @@ export default {
           console.error('Error fetching services:', error);
         });
     },
+    goBack() {
+      this.$router.push('/orders');
+    }
   },
   mounted() {
     const storedAccount = localStorage.getItem('accountDetails');
@@ -118,5 +122,17 @@ export default {
 
 .services-list li:hover {
   background-color: #e9e9e9;
+}
+
+.back-button {
+  
+  margin: 10px;
+  padding: 5px 10px;
+  background-color: #198754; 
+  border: 1px solid darken(#198754, 10%); 
+  border-radius: 5px;
+  cursor: pointer;
+  color: white; 
+  font-weight: bold; 
 }
 </style>
