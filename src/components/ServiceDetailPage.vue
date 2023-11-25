@@ -11,22 +11,23 @@
         <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
         
         <div id="service-reviews">
-          <h2>Reviews</h2>
-          <ul>
-            <li v-for="review in service.all_reviews" :key="review.id">
-              <strong>{{ review.name }}:</strong> {{ review.review }}  <star-rating :value="review.rate" isReadOnly></star-rating>
-            </li>
-          </ul>
+      <h2>Reviews</h2>
+      <ul>
+        <li v-for="review in service.all_reviews" :key="review.id">
+          <strong>{{ review.name }}:</strong> {{ review.review }}
+          <star-rating :value="review.rate" isReadOnly></star-rating>
+        </li>
+      </ul>
           <button @click="openReviewForm" id="make-review-button">Make Review</button>
         </div>
 
         <!-- Review Form -->
         <div v-if="showReviewForm" id="review-form">
-          <input type="text" v-model="review.name" placeholder="Your Name" />
-          <star-rating v-model="review.rate"></star-rating>
-          <textarea v-model="review.review" placeholder="Your Review"></textarea>
-          <button @click="submitReview(service.uid)">Submit Review</button>
-        </div>
+    <input type="text" v-model="review.name" placeholder="Your Name" />
+    <star-rating :value="review.rate" @update:rating="updateRating"></star-rating>
+    <textarea v-model="review.review" placeholder="Your Review"></textarea>
+    <button @click="submitReview(service.uid)">Submit Review</button>
+  </div>
 
       
       </div>
@@ -51,7 +52,7 @@ export default {
       service: null,
       accountDetails: null,
       showReviewForm: false, 
-      review: { name: '', rate: null, review: '' } 
+      review: { name: '', rate: 0, review: '' } 
     };
   },
   methods: {
@@ -149,6 +150,9 @@ export default {
       console.error('Error creating service:', error);
     });
 },
+  updateRating(newRating) {
+    this.review.rate = newRating;
+  }
   },
   mounted() {
     const uid = this.$route.params.uid;
