@@ -9,12 +9,8 @@
       <p class="order-info">Total Price: {{ selectedOrder.totalPrice }}</p>
       <h2>Services:</h2>
       <ul class="services-list">
-        <li v-for="serviceId in selectedOrder.services" :key="serviceId">
-          <div v-for="service in services" :key="service">
-            <div v-if="service.uid === serviceId">
-              Service name: {{ service.serviceName }} - Price: {{ service.price }}
-            </div>
-          </div>
+        <li v-for="serviceDetail in selectedOrder.services" :key="serviceId">
+              Service name: {{ serviceDetail.serviceName }} - Price: {{ serviceDetail.servicePrice }}
         </li>
       </ul>
     </div>
@@ -33,7 +29,6 @@ export default {
     return {
       accountDetails: { orders: [] },
       selectedOrder: null,
-      services: []
     };
   },
   methods: {
@@ -48,21 +43,6 @@ export default {
     formatDate(dateArray) {
       return `${dateArray[0]}-${dateArray[1]}-${dateArray[2]}`;
     },
-    fetchServices() {
-      fetch('http://localhost:8080/advertisement/services/all')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.services = data;
-        })
-        .catch(error => {
-          console.error('Error fetching services:', error);
-        });
-    },
     goBack() {
       this.$router.push('/orders');
     }
@@ -71,7 +51,6 @@ export default {
     const storedAccount = localStorage.getItem('accountDetails');
     if (storedAccount) {
       this.accountDetails = JSON.parse(storedAccount);
-      this.fetchServices();
     }
 
     if (this.orderId) {
