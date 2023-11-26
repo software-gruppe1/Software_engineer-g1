@@ -10,7 +10,7 @@ import Contact from './views/Contact.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: HomePage // Direct route for the homepage
   },
@@ -25,7 +25,7 @@ const routes = [
     component: ServiceFormPage
   },
   {
-    path: '/service/:uid', // Changed to lowercase and more descriptive
+    path: '/:uid', // Changed to lowercase and more descriptive
     name: 'ServiceDetail',
     component: ServiceDetailPage,
     props: true
