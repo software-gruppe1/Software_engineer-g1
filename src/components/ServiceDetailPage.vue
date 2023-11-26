@@ -41,7 +41,7 @@
   
   
   <script>
-import StarRating from '../components/StarRating.vue'; 
+import StarRating from '../components/StarRating.vue';
 export default {
   name: 'ServiceDetailPage',
   components: {
@@ -144,6 +144,7 @@ export default {
       this.showReviewForm = false;
       
       localStorage.setItem('refreshNeeded', 'true');
+      location.reload();
       
     })
     .catch((error) => {

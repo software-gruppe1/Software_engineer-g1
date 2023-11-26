@@ -2,10 +2,12 @@
   <div class="transparent-box">
     <!-- Cards Section -->
     <div class="card-container">
-      <div v-for="card in cards" :key="card.id" class="card">
-        <img :src="card.image" alt="Card image" class="card-image"/>
-        <h2 class="card-title">{{ card.title }}</h2>
+      <div v-for="card in services" :key="card" class="card">
+        <router-link :to="`/${formatServiceNameToURL(card.uid)}`">
+        <img :src="`http://localhost:8080/images/${card.uid}.png`" alt="Card image" class="card-image"/>
+        <h2 class="card-title">{{ card.serviceName }}</h2>
         <p class="card-description">{{ card.description }}</p>
+      </router-link>
       </div>
     </div>
   </div>
@@ -28,6 +30,35 @@ export default defineComponent({
     ]);
 
     return { cards };
+  },
+  data(){
+    return{
+      services : []
+    }
+  },
+  methods: {
+    fetchServices() {
+      fetch('http://localhost:8080/advertisement/services/all')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.services = data;
+        })
+        .catch(error => {
+          console.error('Error fetching services:', error);
+        });
+    },
+    formatServiceNameToURL(serviceName) {
+      return serviceName.toLowerCase().replace(/\s+/g, '-');
+    },
+    
+  },
+  mounted(){
+    this.fetchServices();
   }
 })
 </script>
@@ -57,6 +88,16 @@ export default defineComponent({
   border-radius: 10px;
   width: 30%;
   margin-bottom: 15px;
+  transition: transform 0.2s ease; 
+}
+.card:hover{
+  transform: scale(1.1); 
+  .card-title{
+    color: #198754
+  }
+  .card-description{
+    color: #198754
+  }
 }
 
 .card-image {
@@ -70,10 +111,12 @@ export default defineComponent({
 .card-title {
   font-size: 2em;
   margin-bottom: 15px;
+  color: black;
 }
 
 .card-description {
   font-size: 1.2em;
+  color: black;
 }
 
 /* Mobile view: 1x6 grid */
