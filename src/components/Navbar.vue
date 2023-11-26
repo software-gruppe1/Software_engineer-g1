@@ -20,12 +20,12 @@
             <RouterLink class="nav-link" to="/home">Home</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/About">About</RouterLink></li>
+            <RouterLink class="nav-link" to="/about">About</RouterLink></li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/services">Services</router-link>
+            <router-link class="nav-link" to="/Services">Services</router-link>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/Contact">Contact</RouterLink>
+            <RouterLink class="nav-link" to="/contact">Contact</RouterLink>
           </li>
         </ul>
 

@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: '/services',
-    name: 'Services',
+    name: 'services',
     component: Services
   },
   {
