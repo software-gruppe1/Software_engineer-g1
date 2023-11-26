@@ -26,9 +26,9 @@ export default defineComponent({
   data() {
     return {
       images: [
-        '/images/test.avif',
-        '/images/test6.jpg',
-        '/images/skopje.jpg',
+        '/images/frontpage_1.png',
+        '/images/frontpage_2.png',
+        '/images/frontpage_3.png',
         // ... add more image paths as needed
       ]
     };
