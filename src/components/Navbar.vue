@@ -58,7 +58,7 @@
             <div class="cart-total">
               Total: {{ accountDetails.shopping_cart.totalPrice }}
             </div>
-            <button @click="createOrder" class="pay-button">Pay</button>
+            <button v-if="accountDetails.shopping_cart.services.length !== 0" @click="createOrder" class="pay-button">Pay</button>
           </div>
         </div>
 
@@ -307,7 +307,7 @@ button {
   height: auto;
   margin-right: 5px;
   width: 27px;  /* Adjust the size as needed */
-    height: 27px;
+  height: 27px;
 }
 
 .user-dropdown {
@@ -358,8 +358,10 @@ button {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   width: 300px; /* Adjust as needed */
+  max-height: 400px;
   display: none; /* Initially hidden */
   flex-direction: column;
+  overflow-y: scroll;
 }
 
 .cart-item {
@@ -416,7 +418,7 @@ button {
   border-radius: 5px; 
   display: inline-block; 
   margin: 5px; 
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .service-item::after {

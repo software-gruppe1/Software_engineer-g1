@@ -2,7 +2,7 @@
   <div class="transparent-box">
     <!-- Cards Section -->
     <div class="card-container">
-      <div v-for="card in services" :key="card" class="card">
+      <div v-for="(card, index) in services.slice(0, 6)" :key="card" class="card">
         <router-link :to="`/${formatServiceNameToURL(card.uid)}`">
         <img :src="`http://localhost:8080/images/${card.uid}.png`" alt="Card image" class="card-image"/>
         <h2 class="card-title">{{ card.serviceName }}</h2>

@@ -2,7 +2,7 @@
   <div class="services-box">
     <h2 class="services-title">Your Services ({{ nonEmptyServiceCount }})</h2>
     <div class="button-container">
-      <button class="modern-button" @click="navigateToServiceForm">Make Services</button>
+      <button v-if="accountDetails" class="modern-button" @click="navigateToServiceForm">Make Services</button>
     </div>
     <div v-if="services.length === 0">Loading services...</div>
     <div v-else class="service-container">

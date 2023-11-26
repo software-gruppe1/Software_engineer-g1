@@ -8,8 +8,9 @@
         <p id="service-location">Location: {{ service.location }}</p>
         <p id="service-date">Date: {{ service.date }}</p>
         <p id="service-price">Price: {{ service.price }}</p>
-        <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
-        
+        <div v-if="accountDetails != null">
+          <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
+        </div>
         <div id="service-reviews">
       <h2>Reviews</h2>
       <ul>
