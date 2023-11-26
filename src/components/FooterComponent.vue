@@ -16,7 +16,7 @@
           </a>
         </div>
         <p class="copyright">
-          Copyright ©2023 All rights reserved
+          Software Engineering: Gruppe 1
         </p>
       </div>
     </footer>
@@ -70,6 +70,6 @@ export default {
 
 .copyright {
   font-size: 14px;
-  color: #666;
+  color: #198754;
 }
 </style>
