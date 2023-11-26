@@ -25,7 +25,7 @@ const routes = [
     component: ServiceFormPage
   },
   {
-    path: '/:uid', // Changed to lowercase and more descriptive
+
     name: 'ServiceDetail',
     component: ServiceDetailPage,
     props: true

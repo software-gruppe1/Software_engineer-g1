@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
       <!-- Logo -->
-      <router-link class="navbar-brand" to="/Home">
+      <router-link class="navbar-brand" to="/home">
         <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
       </router-link>
 
@@ -16,7 +16,9 @@
       <div :class="{ 'collapse': !isNavOpen, 'navbar-collapse': true }" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Navigation Links -->
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/home">Home</RouterLink>
+          </li>
           <li class="nav-item">
             <RouterLink class="nav-link" to="/About">About</RouterLink></li>
           <li class="nav-item">
