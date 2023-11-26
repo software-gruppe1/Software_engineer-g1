@@ -16,7 +16,10 @@
           <p>Date: {{ formatDate(service.date) }}</p>
           <p>Price: {{ service.price }}</p>
           </router-link>
+          <div>
           <button class="delete-button" @click="confirmDelete(service.uid)">Delete</button>
+          <button class="edit-button" @click="">Edit</button>
+        </div>
         </div>
       </div>
     </div>
@@ -260,9 +263,22 @@ export default {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
-    margin-top: 10px; /* Adjust as needed */
+    margin-top: 12px; /* Adjust as needed */
     display: flex;
     margin-left: 180px;
+  }
+
+  .edit-button {
+    background-color: #007bff; /* Red background */
+    color: white; /* White text */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: -34px; /* Adjust as needed */
+    display: flex;
+    margin-right: 180px;
   }
 
   .service-card h3 {
