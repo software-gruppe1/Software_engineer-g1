@@ -17,7 +17,8 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Navigation Links -->
           <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/About">About</RouterLink></li>
           <li class="nav-item">
             <router-link class="nav-link" to="/services">Services</router-link>
           </li>
