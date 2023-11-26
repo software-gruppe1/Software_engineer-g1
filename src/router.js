@@ -25,7 +25,7 @@ const routes = [
     component: ServiceFormPage
   },
   {
-    path: '/:uid', 
+
     name: 'ServiceDetail',
     component: ServiceDetailPage,
     props: true
