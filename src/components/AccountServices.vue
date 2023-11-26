@@ -13,7 +13,7 @@
           <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
           <p>{{ service.description }}</p>
           <p>Location: {{ service.location }}</p>
-          <p>Date: {{ service.date }}</p>
+          <p>Date: {{ formatDate(service.date) }}</p>
           <p>Price: {{ service.price }}</p>
           </router-link>
           <button class="delete-button" @click="confirmDelete(service.uid)">Delete</button>
@@ -50,6 +50,9 @@ export default {
   methods: {
     navigateToServiceForm() {
       this.$router.push({ name: 'ServiceFormPage' });
+    },
+    formatDate(dateArray) {
+      return `${dateArray[0]}-${dateArray[1]}-${dateArray[2]}`;
     },
 
     formatServiceNameToURL(serviceName) {

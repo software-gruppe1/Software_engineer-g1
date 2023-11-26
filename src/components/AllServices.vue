@@ -9,7 +9,7 @@
           <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
           <p>{{ service.description }}</p>
           <p>Location: {{ service.location }}</p>
-          <p>Date: {{ service.date }}</p>
+          <p>Date: {{ formatDate(service.date) }}</p>
           <p>Price: {{ service.price }}</p>
         </router-link>
       <div v-if="accountDetails != null">
@@ -33,7 +33,9 @@ export default {
     formatServiceNameToURL(serviceName) {
       return serviceName.toLowerCase().replace(/\s+/g, '-');
     },
-
+    formatDate(dateArray) {
+      return `${dateArray[0]}-${dateArray[1]}-${dateArray[2]}`;
+    },
     fetchServiceImages() {
       this.services.forEach(service => {
         fetch(`http://localhost:8080/images/${service.uid}.png`)

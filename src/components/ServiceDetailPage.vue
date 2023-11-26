@@ -6,7 +6,7 @@
         <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" id="service-image"/>
         <p id="service-description">{{ service.description }}</p>
         <p id="service-location">Location: {{ service.location }}</p>
-        <p id="service-date">Date: {{ service.date }}</p>
+        <p id="service-date">Date: {{ formatDate(service.date) }}</p>
         <p id="service-price">Price: {{ service.price }}</p>
         <div v-if="accountDetails != null">
           <button @click="addToCart(accountDetails.username, service.uid)" id="add-to-cart-button">Add to Shopping Cart</button>
@@ -73,6 +73,9 @@ export default {
           console.error('Error fetching data:', error);
           this.service = null; // or handle the error differently
         });
+    },
+    formatDate(dateArray) {
+      return `${dateArray[0]}-${dateArray[1]}-${dateArray[2]}`;
     },
     async addToCart(username, UID) {
     const url = `http://localhost:8080/user/cart/${username}/${UID}`;
