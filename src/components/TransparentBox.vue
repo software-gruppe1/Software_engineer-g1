@@ -18,19 +18,6 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'TransparentBox',
-  setup() {
-    const cards = ref([
-      { id: 1, image: '/images/mexico.jpg', title: 'Card 1', description: 'Description for card 1' },
-      { id: 2, image: '/images/india.jpg', title: 'Card 2', description: 'Description for card 2' },
-      { id: 3, image: '/images/turkey.jpg', title: 'Card 3', description: 'Description for card 3' },
-      { id: 4, image: '/images/italy.jpg', title: 'Card 4', description: 'Description for card 4' },
-      { id: 5, image: '/images/amerika.jpg', title: 'Card 5', description: 'Description for card 5' },
-      { id: 6, image: '/images/jordan.jpg', title: 'Card 6', description: 'Description for card 6' },
-      // Add more card objects as needed
-    ]);
-
-    return { cards };
-  },
   data(){
     return{
       services : []
