@@ -90,14 +90,16 @@ export default defineComponent({
   margin-bottom: 15px;
   transition: transform 0.2s ease; 
 }
-.card:hover{
+.card:hover {
   transform: scale(1.1); 
-  .card-title{
-    color: #198754
-  }
-  .card-description{
-    color: #198754
-  }
+}
+
+.card:hover .card-title {
+  color: #198754;
+}
+
+.card:hover .card-description {
+  color: #198754;
 }
 
 .card-image {
