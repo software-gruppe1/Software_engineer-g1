@@ -12,7 +12,9 @@
           <p>Date: {{ service.date }}</p>
           <p>Price: {{ service.price }}</p>
         </router-link>
+      <div v-if="accountDetails != null">
         <button v-if="accountDetails.username === 'Admin' || service.account === accountDetails.username" class="delete-button" @click="confirmDelete(service.uid)">Delete</button>
+      </div>
       </div>
     </div>
   </div>
