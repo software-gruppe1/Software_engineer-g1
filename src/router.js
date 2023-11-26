@@ -6,6 +6,7 @@ import ServiceDetailPage from './components/ServiceDetailPage.vue';
 import ViewAllServices from './views/ViewAllServices.vue';
 import Orders from './views/Orders.vue';
 import About from './views/About.vue';
+import Contact from './views/Contact.vue';
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/contact', // New route for the Contact page
+    name: 'Contact',
+    component: Contact
   }
 ];
 

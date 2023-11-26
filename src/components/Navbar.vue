@@ -22,7 +22,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/services">Services</router-link>
           </li>
-          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/Contact">Contact</RouterLink>
+          </li>
         </ul>
 
         <!-- Search Form -->
@@ -80,142 +82,138 @@
 
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
-  name: 'Navbar',
-  data() {
-    return {
-      isNavOpen: false,
-      showLoginModal: false,
-      isLoggedIn: false,
-      showDropdown: false,
-      accountDetails: null,
-      showCartDropdown: false,
-      services: [],
-    };
-  },
-  computed: {
-    totalPrice() {
-      return this.cartItems.reduce((total, item) => total + item.price, 0);
+    name: 'Navbar',
+    data() {
+        return {
+            isNavOpen: false,
+            showLoginModal: false,
+            isLoggedIn: false,
+            showDropdown: false,
+            accountDetails: null,
+            showCartDropdown: false,
+            services: [],
+        };
     },
-  },
-  
-  methods: {
-    async login(role) {
-      try {
-        const url = `http://localhost:8080/user/account/${role}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const account = await response.json();
-        if (account) {
-          this.isLoggedIn = true;
-          this.accountDetails = account;
-          localStorage.setItem('accountDetails', JSON.stringify(account));
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-      this.showLoginModal = false;
-      location.reload();
-    },
-    toggleDropdown() {
-      this.showDropdown = !this.showDropdown;
-      console.log('Dropdown toggled. Current state:', this.showDropdown);
-    },
-    handleClickOutside(event) {
-      const dropdownElement = this.$refs.dropdownMenu;
-      if (dropdownElement && !dropdownElement.contains(event.target)) {
-        this.showDropdown = false;
-        console.log('Clicked outside. Dropdown closed.');
-      }
-    },
-    logout() {
-      console.log("Logout method called");
-      localStorage.removeItem('accountDetails');
-      this.isLoggedIn = false;
-      this.accountDetails = null;
-      window.location.reload();
-    },
-    async refreshAccountDetails() {
-    try {
-      // Replace with the actual API endpoint to fetch account details
-      const url = `http://localhost:8080/user/account/${this.accountDetails.username}`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          // Add any required headers, like authorization tokens
+    computed: {
+        totalPrice() {
+            return this.cartItems.reduce((total, item) => total + item.price, 0);
         },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const updatedAccountDetails = await response.json();
-
-      // Update local storage
-      localStorage.setItem('accountDetails', JSON.stringify(updatedAccountDetails));
-
-      // Update component state
-      this.accountDetails = updatedAccountDetails;
-    } catch (error) {
-      console.error('Error fetching updated account details:', error);
-    }
-  },
-  fetchServices() {
-      fetch('http://localhost:8080/advertisement/services/all')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.services = data;
-        })
-        .catch(error => {
-          console.error('Error fetching services:', error);
-        });
     },
-    async createOrder() {
-    const url = `http://localhost:8080/user/order/${this.accountDetails.username}`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    methods: {
+        async login(role) {
+            try {
+                const url = `http://localhost:8080/user/account/${role}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const account = await response.json();
+                if (account) {
+                    this.isLoggedIn = true;
+                    this.accountDetails = account;
+                    localStorage.setItem('accountDetails', JSON.stringify(account));
+                }
+            }
+            catch (error) {
+                console.error('Fetch error:', error);
+            }
+            this.showLoginModal = false;
+            location.reload();
         },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      await this.refreshAccountDetails();
-      console.log('order created and account details refreshed');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error could not create order:', error);
-    }
-  },
-    
-  },
-  mounted() {
-    const storedAccount = localStorage.getItem('accountDetails');
-    if (storedAccount) {
-      this.accountDetails = JSON.parse(storedAccount);
-      this.isLoggedIn = true;
-      this.fetchServices();
-      console.log(this.services);
-    }
-    document.addEventListener('click', this.handleClickOutside);
-  },
-  beforeDestroy() {
-    document.removeEventListener('click', this.handleClickOutside);
-  },
-
-  
+        toggleDropdown() {
+            this.showDropdown = !this.showDropdown;
+            console.log('Dropdown toggled. Current state:', this.showDropdown);
+        },
+        handleClickOutside(event) {
+            const dropdownElement = this.$refs.dropdownMenu;
+            if (dropdownElement && !dropdownElement.contains(event.target)) {
+                this.showDropdown = false;
+                console.log('Clicked outside. Dropdown closed.');
+            }
+        },
+        logout() {
+            console.log("Logout method called");
+            localStorage.removeItem('accountDetails');
+            this.isLoggedIn = false;
+            this.accountDetails = null;
+            window.location.reload();
+        },
+        async refreshAccountDetails() {
+            try {
+                // Replace with the actual API endpoint to fetch account details
+                const url = `http://localhost:8080/user/account/${this.accountDetails.username}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                    // Add any required headers, like authorization tokens
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const updatedAccountDetails = await response.json();
+                // Update local storage
+                localStorage.setItem('accountDetails', JSON.stringify(updatedAccountDetails));
+                // Update component state
+                this.accountDetails = updatedAccountDetails;
+            }
+            catch (error) {
+                console.error('Error fetching updated account details:', error);
+            }
+        },
+        fetchServices() {
+            fetch('http://localhost:8080/advertisement/services/all')
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+                .then(data => {
+                this.services = data;
+            })
+                .catch(error => {
+                console.error('Error fetching services:', error);
+            });
+        },
+        async createOrder() {
+            const url = `http://localhost:8080/user/order/${this.accountDetails.username}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                await this.refreshAccountDetails();
+                console.log('order created and account details refreshed');
+                window.location.reload();
+            }
+            catch (error) {
+                console.error('Error could not create order:', error);
+            }
+        },
+    },
+    mounted() {
+        const storedAccount = localStorage.getItem('accountDetails');
+        if (storedAccount) {
+            this.accountDetails = JSON.parse(storedAccount);
+            this.isLoggedIn = true;
+            this.fetchServices();
+            console.log(this.services);
+        }
+        document.addEventListener('click', this.handleClickOutside);
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.handleClickOutside);
+    },
+    components: { RouterLink }
 };
 </script>
 
