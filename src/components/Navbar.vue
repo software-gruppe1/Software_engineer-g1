@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
       <!-- Logo -->
-      <router-link class="navbar-brand" to="/home">
+      <router-link class="navbar-brand" to="/">
         <img src="/images/logo-new.png" alt="Logo" class="navbar-logo">
       </router-link>
 
@@ -17,7 +17,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Navigation Links -->
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/home">Home</RouterLink>
+            <RouterLink class="nav-link" to="/">Home</RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink class="nav-link" to="/about">About</RouterLink></li>
