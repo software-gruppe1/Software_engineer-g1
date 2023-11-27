@@ -7,7 +7,7 @@
         <router-link :to="`/${formatServiceNameToURL(service.uid)}`">
           <h3>{{ service.serviceName }}</h3>
           <img :src="`http://localhost:8080/images/${service.uid}.png`" alt="Service Image" width="250" height="250">
-          <p>{{ service.description }}</p>
+          <p class="single_line_des">{{ service.description }}</p>
           <p>Location: {{ service.location }}</p>
           <p>Date: {{ formatDate(service.date) }}</p>
           <p>Price: {{ service.price }}</p>
@@ -238,6 +238,12 @@ export default {
     overflow: hidden; 
     text-overflow: ellipsis; 
     max-width: 100%; 
+  }
+
+  .single_line_des{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   </style>
   

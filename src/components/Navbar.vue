@@ -195,7 +195,8 @@ export default {
                 }
                 await this.refreshAccountDetails();
                 console.log('order created and account details refreshed');
-                window.location.reload();
+                let orderId = this.accountDetails.orders[this.accountDetails.orders.length - 1].orderId
+                this.$router.push({ name: 'OrderDetails', params: { orderId } });
             }
             catch (error) {
                 console.error('Error could not create order:', error);

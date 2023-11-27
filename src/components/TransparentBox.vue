@@ -106,6 +106,9 @@ export default defineComponent({
 .card-description {
   font-size: 1.2em;
   color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Mobile view: 1x6 grid */
